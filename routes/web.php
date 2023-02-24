@@ -34,8 +34,8 @@ Route::resource('customer', 'CustomerController');
 // Sampah
 Route::resource('sampah', 'SampahController');
 
-// Role
-Route::resource('roles', 'RolesController');
+//transaksi
+Route::resource('transaksi', 'TransaksiController');
 
 // Pengguna
 Route::get(
@@ -55,11 +55,11 @@ Route::get(
 );
 
 // Transaksi Penimbangan
-Route::get(
-    '/transaksi', function () {
-        return view('transaksi.index');
-    }
-);
+// Route::get(
+//     '/transaksi', function () {
+//         return view('transaksi.index');
+//     }
+// );
 Route::get(
     '/transaksi.tambah', function () {
         return view('transaksi.tambah');

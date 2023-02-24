@@ -38,32 +38,28 @@
                   <div class="form-group">
                     <!-- Autoincrement gabungan dari tahun-bulan-tanggal (tanggal di atas) dan no urut (berdasarkan tanggal) -->
                     <label for="id_penimbangan">No Penimbangan</label>
-                    <input class="form-control" id="id_penimbangan" disabled>
+                    <input class="form-control" id="id_penimbangan" value="{{$NomorPenimbangan}}" disabled>
                   </div>
                   <div class="form-group">
                     <!-- Auto input dari Login Penimbang -->
                     <label for="penimbang">Nama Petugas</label>
-                    <input class="form-control" id="penimbang" disabled>
+                    <input class="form-control" id="penimbang" value="{{$Petugas->name}}" disabled>
                   </div>
                     <!-- Default isi otomatis sesuai tanggal berjalan, tetapi bisa juga diganti secara manual -->
                     <div class="form-group">
                       <label>Tanggal</label>
                       <div class="input-group date" id="tanggal" data-target-input="nearest">
-                          <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
-                          <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                          </div>
+                          <input type="date" class="form-control datetimepicker-input" data-target="#reservationdate" value="{{now()->format('Y-m-d')}}"/>
                       </div>
                   </div>                  
                   <div class="form-group">
                     <!-- Isi Option Otomatis dari Tabel Data Nasabah -->
                   <label>Nama Nasabah</label>
-                    <select class="select2bs4" multiple="multiple" data-placeholder="Pilih Nasabah"
+                    <select class="select2bs4" data-placeholder="Pilih Nasabah"
                             style="width: 100%;">
-                        <option>Mia - 9414 0001</option>                                               
-                        <option>Yayuk - 9414 0002</option>
-                        <option>Findi - 9414 0003</option>
-                        <option>Fani - 9414 0004</option>
+                        @foreach ($SemuaNasabah as $nasabah)
+                        <option value="{{$nasabah->id}}">{{$nasabah->name}}</option>
+                        @endforeach
                     </select>
                   </div>
                 </div>
@@ -94,11 +90,10 @@
                 <div class="form-group">
                     <!-- Isi Option Otomatis dari Tabel Data Sampah -->
                     <label>Nama Sampah</label>
-                    <select class="select2bs4" multiple="multiple" data-placeholder="Pilih Sampah"
-                            style="width: 100%;">
-                        <option>Gelas Plastik Bersih - IDS0001</option>
-                        <option>Rongsok - IDS0002</option>
-                        <option>Kardus - IDS0003</option>
+                    <select class="select2bs4" data-placeholder="Pilih Sampah" style="width: 100%;">
+                        @foreach ($ListSampah as $sampah)
+                          <option value="{{$sampah->id}}">{{$sampah->nama_sampah}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group row">

@@ -39,10 +39,7 @@
                   <div class="form-group col-3">
                     <label>Tanggal</label>
                     <div class="input-group date" id="tanggal" data-target-input="nearest">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
-                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                        </div>
+                        <input type="date" class="form-control datetimepicker-input" data-target="#reservationdate"/>
                     </div>
                   </div>
                   <div class="form-group col-3">

@@ -39,10 +39,7 @@
                   <div class="form-group col-3">
                     <label>Tanggal</label>
                     <div class="input-group date" id="tanggal" data-target-input="nearest">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
-                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                        </div>
+                        <input type="date" class="form-control datetimepicker-input" data-target="#reservationdate"/>
                     </div>
                   </div>
                   <div class="form-group col-3">
@@ -65,36 +62,11 @@
                     </select>
                   </div>
                 </div>
-                <!-- /.card-body -->
-
-                <!-- <div class="card-footer"> -->
-                    <!-- Saat Tombol diklik, Form Data Penimbangan Tidak Aktif (Disable) dan Form Input Penimbangan Aktif (Sebelumnya Disable) -->
-                  <!-- <button class="btn btn-primary">Input Penjualan</button> -->
-                <!-- </div> -->
-
-                
               </form>
-              
             </div>
-            <!-- /.card -->
-                        <!-- Form Element sizes -->
-            <!-- <div class="card card-primary"> -->
-              <!-- <div class="card-header">
-                <h3 class="card-title">Form Penjualan Sampah</h3>
-              </div> -->
-
               <div class="card card-default">
                 <div class="card-header">
                   <h3 class="card-title"><b>Data Penjualan</b></h3>                  
-
-                  <!-- <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div> -->
                 </div>
                                 
                 <!-- /.card-header -->
@@ -104,7 +76,7 @@
                       <div class="form-group">
                         <!-- Isi Option Otomatis dari Tabel Data Sampah -->
                         <label>Nama Sampah</label>
-                        <select class="select2bs4" multiple="multiple" data-placeholder="Pilih Sampah"
+                        <select class="select2bs4" data-placeholder="Pilih Sampah"
                                 style="width: 100%;">
                             <option>Gelas Plastik Bersih - IDS0001</option>
                             <option>Rongsok - IDS0002</option>
@@ -250,15 +222,8 @@
                 </a>
                 </div>
                 </div>
-                
-              </div>
-              <!-- /.card -->
-            <!-- </div> -->
-                              
+              </div>              
           </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-
           <div class="col-md-12">
             <div class="col-sm-6 row">                  
               <div class="card-body row">
@@ -282,11 +247,6 @@
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
-        <!-- /.card-body -->
-        <!-- <div class="card-footer">
-          Footer
-        </div> -->
-        <!-- /.card-footer-->
 
 </div>
 <!-- /.content-wrapper -->

@@ -112,22 +112,7 @@
                         <i class="fas fa-trash"></i>
                       </a>
                     </td>
-                  </tr>
-                  <tr>
-                  <td>IDP0004</td>
-                    <td>Erniati</td>
-                    <td>erniati@gmail.com</td>
-                    <td>erniati123</td>
-                    <td>Penimbang</td>
-                    <td style="text-align: center">                      
-                      <a href="pengguna.edit" class="btn btn-sm bg-yellow">
-                        <i class="fas fa-pen"></i>
-                      </a>
-                      <a href="#" class="btn btn-sm bg-red">
-                        <i class="fas fa-trash"></i>
-                      </a>
-                    </td>
-                  </tr>
+                  </tr> 
                 </table>
               </div>
         </div>
