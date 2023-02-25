@@ -43,7 +43,7 @@ class TransaksiController extends Controller
         return view('transaksi.index',compact('penimbanganModel'));
     }
 
-    public function store($id, Request $request , penimbangan $penimbanganModel)
+    public function store(Request $request )
     {
      $request->validate([
         'id_sampah'=>'required',
@@ -84,17 +84,10 @@ class TransaksiController extends Controller
 
 
     public function destroy($id){
-        // $penimbangan =  penimbangan::find($id);
-        // $penimbangan->delete();
-        // return redirect()->route('/transaksi')->with('success', 'Success Delete.');
-            $penimbangan = penimbangan::find($id);
-        $penimbangan->delete();
-
-        if ($penimbangan != null) {
-            $penimbangan->delete();
-            return redirect()->route('/transaksi')->with(['message'=> 'Successfully deleted!!']);
-        }
-        return redirect()->route('transaksi.index')->with(['message'=> 'Wrong ID!!']);
+        // $penimbangan->destroy();
+        $post = penimbangan::firstOrNew();
+        $post->delete($id);
+        return redirect()->route('transaksi.index')->with('success', 'Success Delete.');
 
     }
 
