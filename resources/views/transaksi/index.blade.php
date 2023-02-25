@@ -179,9 +179,10 @@
                           <tfoot>
                             <td></td>
                             <td></td>
-                            <td>Total Pendapatan (Rp)</td>
+                            <td>Total Pendapatan </td>
                             <td></td>
-                            <td><h4><b>8.620</b></h4></td>
+                            {{-- <td><h4><b>{{ number_format($countTotalHarga)}}</b></h4></td> --}}
+                            <td><h4><b>{{ 'Rp. '.$countTotalHarga}}</b></h4></td>
                           </tfoot>
                           </table>
                       </div>

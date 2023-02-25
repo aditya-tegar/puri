@@ -16,7 +16,6 @@ class TransaksiController extends Controller
         // jika kode penimbanganan '0' init jadi 1
         $KodeTerakhir=Transaksi::orderBy('kode_transaksi', 'desc')->first()->kode_transaksi??null;
 
-
         //define kode 'PNB' berdasarkan kode terakhir
         if (
             !$KodeTerakhir
@@ -26,32 +25,38 @@ class TransaksiController extends Controller
             $KodeTerakhir++;
         }
         $NomorPenimbangan='PNB-'.str_pad($KodeTerakhir, 3, '0', STR_PAD_LEFT);
-        // dd($NomorPenimbangan);
         $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         $Petugas=User::first();
         $SemuaNasabah=Nasabah::all();
-
         $ListSampah=Sampah::all();
 
-        return view('transaksi.index', compact('NomorPenimbangan', 'Petugas', 'SemuaNasabah', 'ListSampah','penimbanganModel'))->with('i', (request()->input('page',1)-1)*5);;
+        $countTotalHarga = penimbangan::all()->where('total_harga')->sum('total_harga');
+
+
+        return view('transaksi.index', compact('NomorPenimbangan', 'Petugas', 'SemuaNasabah', 'ListSampah','penimbanganModel','countTotalHarga'))->with('i', (request()->input('page',1)-1)*5);;
         
     }
     public function create()
     {
         $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
-        // dd($penimbangan);
         return view('transaksi.index',compact('penimbanganModel'));
     }
 
     public function store(Request $request )
     {
-     $request->validate([
-        'id_sampah'=>'required',
-        'berat'=>'required',
-     ]);  
+        $request->validate([
+            'id_sampah'=>'required',
+            'berat'=>'required',
+            'total_harga',
+        ]);  
+        $penimbangan = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
+        foreach($penimbangan as $penimbangan){
+            $penimbangan->id;
+        }
+        $request['total_harga']  =  $penimbangan->harga_beli * $request->berat;
 
-     penimbangan::create($request->all());
-     return redirect()->route('transaksi.store')->with('Success','Sukses Menambah Data  ');
+        penimbangan::create($request->all());
+        return redirect()->route('transaksi.store')->with('Success','Sukses Menambah Data  ');
     }
 
 
