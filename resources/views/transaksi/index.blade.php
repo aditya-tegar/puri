@@ -93,7 +93,7 @@
               <div class="card-body">
                 <form method="POST" action="{{ route('transaksi.store') }}" enctype="multipart/form-data">
                 @csrf
-                <input type="text" name="nasabah" value="{{$request->nasabah}}">
+                <input type="hidden" name="nasabah" value="{{$request->nasabah}}">
 
                 <div class="form-group">
                   <div>
