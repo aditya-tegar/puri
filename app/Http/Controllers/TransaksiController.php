@@ -11,8 +11,9 @@ use Illuminate\Http\Request;
 
 class TransaksiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $data = $request->all();
         // jika kode penimbanganan '0' init jadi 1
         $KodeTerakhir=Transaksi::orderBy('kode_transaksi', 'desc')->first()->kode_transaksi??null;
 
@@ -25,19 +26,21 @@ class TransaksiController extends Controller
             $KodeTerakhir++;
         }
         $NomorPenimbangan='PNB-'.str_pad($KodeTerakhir, 3, '0', STR_PAD_LEFT);
-        $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
+        $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->where('penimbangan.id_nasabah','=',$request->nasabah)->get();
+        // $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         $Petugas=User::first();
         $SemuaNasabah=Nasabah::all();
         $ListSampah=Sampah::all();
 
-        $countTotalHarga = penimbangan::all()->where('total_harga')->sum('total_harga');
+        $countTotalHarga = penimbangan::where('penimbangan.id_nasabah','=',$request->nasabah)->sum('total_harga');
 
 
-        return view('transaksi.index', compact('NomorPenimbangan', 'Petugas', 'SemuaNasabah', 'ListSampah','penimbanganModel','countTotalHarga'))->with('i', (request()->input('page',1)-1)*5);;
+        return view('transaksi.index', compact('NomorPenimbangan', 'Petugas', 'SemuaNasabah', 'ListSampah','penimbanganModel','countTotalHarga','data','request'))->with('i', (request()->input('page',1)-1)*5);;
         
     }
-    public function create()
+    public function create(Request $request)
     {
+
         $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         return view('transaksi.index',compact('penimbanganModel'));
     }
@@ -48,13 +51,16 @@ class TransaksiController extends Controller
             'id_sampah'=>'required',
             'berat'=>'required',
             'total_harga',
+            'id_nasabah',
         ]);  
         $penimbangan = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         foreach($penimbangan as $penimbangan){
             $penimbangan->id;
         }
+        
         $request['total_harga']  =  $penimbangan->harga_beli * $request->berat;
-
+        $request['id_nasabah'] = $request->nasabah;
+        
         penimbangan::create($request->all());
         return redirect()->route('transaksi.store')->with('Success','Sukses Menambah Data  ');
     }
@@ -86,14 +92,34 @@ class TransaksiController extends Controller
 
     }
 
-
-
     public function destroy($id){
         // $penimbangan->destroy();
         $post = penimbangan::firstOrNew();
         $post->delete($id);
-        return redirect()->route('transaksi.index')->with('success', 'Success Delete.');
+        return redirect()->route('transaksi.index')->with('Success', 'Sukses Menghapus Data.');
 
+    }
+
+    public function getUrl(Request $request)
+    {
+        $request->validate([
+            'id_sampah'=>'required',
+            'berat'=>'required',
+            'total_harga',
+            'id_nasabah',
+
+        ]);  
+        $penimbangan = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
+        foreach($penimbangan as $penimbangan){
+            $penimbangan->id;
+        }
+        
+        $request['total_harga']  =  $penimbangan->harga_beli * $request->berat;
+        $request['id_nasabah'] = $request->nasabah;
+
+        dd($request);
+        penimbangan::create($request->all());
+        return redirect()->route('transaksi.store')->with('Success','Sukses Menambah Data  ');
     }
 
 }

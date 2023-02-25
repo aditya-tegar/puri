@@ -34,6 +34,9 @@
               <!-- /.card-header -->
               <!-- form start -->
               <form>
+              {{-- <form method="POST" action="{{ route('transaksi.store') }}" > --}}
+                <input type="text" hidden name="nasabah">
+                {{-- @csrf --}}
                 <div class="card-body">
                   <div class="form-group">
                     <!-- Autoincrement gabungan dari tahun-bulan-tanggal (tanggal di atas) dan no urut (berdasarkan tanggal) -->
@@ -58,7 +61,7 @@
                     <select class="select2bs4" data-placeholder="Pilih Nasabah" name="nasabah" id="nasabah"
                             style="width: 100%;">
                         @foreach ($SemuaNasabah as $nasabah)
-                        <option value="{{$nasabah->id}}">{{$nasabah->nama_nasabah}}</option>
+                        <option value="{{$nasabah->id}}" >{{$nasabah->nama_nasabah}}</option>
                         @endforeach
                     </select>
                   </div>
@@ -88,8 +91,10 @@
                 <h3 class="card-title">Form Input Penimbangan Sampah</h3>
               </div>
               <div class="card-body">
-          <form method="POST" action="{{ route('transaksi.store') }}" enctype="multipart/form-data">
-            @csrf
+                <form method="POST" action="{{ route('transaksi.store') }}" enctype="multipart/form-data">
+                @csrf
+                <input type="text" name="nasabah" value="{{$request->nasabah}}">
+
                 <div class="form-group">
                   <div>
                     @if(session()->get('Success'))
@@ -102,7 +107,7 @@
                     <label>Nama Sampah</label>
                     <select class="select2bs4" data-placeholder="Pilih Sampah" style="width: 100%;" name="id_sampah" >
                         @foreach ($ListSampah as $penimbangan)
-                          <option value="{{$penimbangan->id}}" name="id_sampah">{{$penimbangan->nama_sampah}}</option>
+                          <option value="{{$penimbangan->id}}" name="sampah_value">{{$penimbangan->nama_sampah}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -153,6 +158,8 @@
                           </thead>
                           <tbody>
                                   @foreach ($penimbanganModel as $dataPenimbang)
+                                  {{-- @foreach($ListSampah as $sampah)
+                                  @if($sampah->id == 3) --}}
                               <tr>
                                   <td>{{ ++$i }}</td>
                                   <td>{{ $dataPenimbang->nama_sampah }}</td>
@@ -174,6 +181,8 @@
                                     </form>
                                   </td>
                               </tr>
+                              {{-- @endif
+                              @endforeach --}}
                               @endforeach
                           </tbody>
                           <tfoot>
@@ -225,4 +234,17 @@
         <!-- /.card-footer-->
 </div>
 <!-- /.content-wrapper -->
+@endsection
+
+
+@section('javascript')
+
+
+<script>
+    $(document).ready(function() {
+      alert($('#id_sampah').id);
+    });  
+
+  </script>
+
 @endsection
