@@ -35,7 +35,9 @@ Route::resource('customer', 'CustomerController');
 Route::resource('sampah', 'SampahController');
 
 //transaksi
-Route::resource('transaksi', 'TransaksiController');
+// Route::resource('transaksi', 'TransaksiController');
+
+Route::resource('transaksi',TransaksiController::class);
 
 // Pengguna
 Route::get(

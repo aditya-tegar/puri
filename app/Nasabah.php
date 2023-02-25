@@ -9,6 +9,7 @@ class Nasabah extends Model
 {
     protected $table = 'nasabah';
     protected $fillable = [
+        'id',
         'nomor_rekening',
         'nama_nasabah',
         'jenis_kelamin',

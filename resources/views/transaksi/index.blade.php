@@ -55,10 +55,10 @@
                   <div class="form-group">
                     <!-- Isi Option Otomatis dari Tabel Data Nasabah -->
                   <label>Nama Nasabah</label>
-                    <select class="select2bs4" data-placeholder="Pilih Nasabah"
+                    <select class="select2bs4" data-placeholder="Pilih Nasabah" name="nasabah" id="nasabah"
                             style="width: 100%;">
                         @foreach ($SemuaNasabah as $nasabah)
-                        <option value="{{$nasabah->id}}">{{$nasabah->name}}</option>
+                        <option value="{{$nasabah->id}}">{{$nasabah->nama_nasabah}}</option>
                         @endforeach
                     </select>
                   </div>
@@ -80,6 +80,7 @@
           <!--/.col (left) -->
 
           <!-- right column -->
+
           <div class="col-md-9">
             <!-- Form Element sizes -->
             <div class="card card-primary">
@@ -87,12 +88,21 @@
                 <h3 class="card-title">Form Input Penimbangan Sampah</h3>
               </div>
               <div class="card-body">
+          <form method="POST" action="{{ route('transaksi.store') }}" enctype="multipart/form-data">
+            @csrf
                 <div class="form-group">
+                  <div>
+                    @if(session()->get('Success'))
+                        <div class="alert alert-success">
+                          {{ session()->get('Success') }}  
+                        </div>
+                    @endif
+                  </div>
                     <!-- Isi Option Otomatis dari Tabel Data Sampah -->
                     <label>Nama Sampah</label>
-                    <select class="select2bs4" data-placeholder="Pilih Sampah" style="width: 100%;">
-                        @foreach ($ListSampah as $sampah)
-                          <option value="{{$sampah->id}}">{{$sampah->nama_sampah}}</option>
+                    <select class="select2bs4" data-placeholder="Pilih Sampah" style="width: 100%;" name="id_sampah" >
+                        @foreach ($ListSampah as $penimbangan)
+                          <option value="{{$penimbangan->id}}" name="id_sampah">{{$penimbangan->nama_sampah}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -101,13 +111,17 @@
                             <label for="berat">Berat Sampah (Kg)</label>
                     </div>
                     <div class="col-4">
-                            <input class="form-control" id="berat" placeholder="Input Berat Sampah">
+                            <input class="form-control" name="berat" placeholder="Input Berat Sampah">
                     </div>
                     <div>
                       <!-- Saat Tombol diklik, Form Input Penimbangan Kosong dan Data terinput di tabel -->
-                      <button class="btn btn-primary">Tambah Data</button>
+                      <button type="submit" class="btn btn-primary">Tambah Data</button>
                     </div>
+
+         
                 </div>
+               
+              </form>
                 
                 <div class="form-group">
                     <div class="card">
@@ -138,51 +152,29 @@
                               </tr>
                           </thead>
                           <tbody>
+                                  @foreach ($penimbanganModel as $dataPenimbang)
                               <tr>
-                                  <td>1.</td>
-                                  <td>Gelas Mineral Bersih</td>
-                                  <td>1</td>
-                                  <td>3.800</td>
-                                  <td>3.800</td>
+                                  <td>{{ ++$i }}</td>
+                                  <td>{{ $dataPenimbang->nama_sampah }}</td>
+                                  <td>{{ $dataPenimbang->berat }}</td>
+                                  <td>{{ $dataPenimbang->harga_beli }}</td>
+                                  <td>{{ $dataPenimbang->total_harga }}</td>
                                   <td>
                                       <!-- <a href="#" class="btn btn-sm bg-yellow">
                                           <i class="fas fa-pen"></i>
                                       </a> -->
-                                      <a href="#" class="btn btn-sm bg-red">
+                                      {{-- <a href="#" class="btn btn-sm bg-red">
                                           <i class="fas fa-trash"></i>
-                                      </a>
+                                      </a> --}}
+                                      <form action="{{ route('transaksi.destroy',$dataPenimbang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
+       
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                    </form>
                                   </td>
                               </tr>
-                              <tr>
-                                  <td>2.</td>
-                                  <td>Rongsok</td>
-                                  <td>1,4</td>
-                                  <td>1.300</td>
-                                  <td>1.820</td>
-                                  <td>
-                                      <!-- <a href="#" class="btn btn-sm bg-yellow">
-                                          <i class="fas fa-pen"></i>
-                                      </a> -->
-                                      <a href="#" class="btn btn-sm bg-red">
-                                          <i class="fas fa-trash"></i>
-                                      </a>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>3.</td>
-                                  <td>Kardus</td>
-                                  <td>2</td>
-                                  <td>1.500</td>
-                                  <td>3.000</td>
-                                  <td>
-                                      <!-- <a href="#" class="btn btn-sm bg-yellow">
-                                          <i class="fas fa-pen"></i>
-                                      </a> -->
-                                      <a href="#" class="btn btn-sm bg-red">
-                                          <i class="fas fa-trash"></i>
-                                      </a>
-                                  </td>
-                              </tr>
+                              @endforeach
                           </tbody>
                           <tfoot>
                             <td></td>
