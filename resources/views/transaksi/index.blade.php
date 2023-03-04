@@ -33,15 +33,15 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form method="GET">
               {{-- <form method="POST" action="{{ route('transaksi.store') }}" > --}}
-                <input type="text" hidden name="nasabah">
+                {{-- <input type="text" hidden name="id_nasabah"> --}}
                 {{-- @csrf --}}
                 <div class="card-body">
                   <div class="form-group">
                     <!-- Autoincrement gabungan dari tahun-bulan-tanggal (tanggal di atas) dan no urut (berdasarkan tanggal) -->
                     <label for="id_penimbangan">No Penimbangan</label>
-                    <input class="form-control" id="id_penimbangan" value="{{$NomorPenimbangan}}" disabled>
+                    <input class="form-control" id="kode_transaksi" value="{{$NomorPenimbangan}}" disabled data-placeholder="kode_transaksi">
                   </div>
                   <div class="form-group">
                     <!-- Auto input dari Login Penimbang -->
@@ -58,8 +58,9 @@
                   <div class="form-group">
                     <!-- Isi Option Otomatis dari Tabel Data Nasabah -->
                   <label>Nama Nasabah</label>
-                    <select class="select2bs4" data-placeholder="Pilih Nasabah" name="nasabah" id="nasabah"
+                    <select required onchange="assignNasabahId()" class="select2bs4" data-placeholder="Pilih Nasabah" name="selectnasabah" id="selectnasabah"
                             style="width: 100%;">
+                        <option value="" >--Pilih Nasabah--</option>
                         @foreach ($SemuaNasabah as $nasabah)
                         <option value="{{$nasabah->id}}" >{{$nasabah->nama_nasabah}}</option>
                         @endforeach
@@ -93,7 +94,9 @@
               <div class="card-body">
                 <form method="POST" action="{{ route('transaksi.store') }}" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="nasabah" value="{{$request->nasabah}}">
+                <input type="hidden" name="id_nasabah" value="{{ $request->selectnasabah }}" id="id_nasabah">
+                <input type="hidden" name="kode_transaksi" value="{{ $NomorPenimbangan}}">
+                <input type="hidden" name="id_petugas" value="{{ $Petugas->id}}">
 
                 <div class="form-group">
                   <div>
@@ -104,6 +107,8 @@
                     @endif
                   </div>
                     <!-- Isi Option Otomatis dari Tabel Data Sampah -->
+                    <h3 class="card-title"><b>{{ $Nasabah?->nama_nasabah ?? null }}</b></h3>
+                    <br/>
                     <label>Nama Sampah</label>
                     <select class="select2bs4" data-placeholder="Pilih Sampah" style="width: 100%;" name="id_sampah" >
                         @foreach ($ListSampah as $penimbangan)
@@ -212,15 +217,15 @@
       <div class="col-sm-6">
         <div class="card-body row">
           <!-- Saat diklik, kolom di form data penimbangan aktif -->
-          <a class="btn btn-app bg-blue">
+          <a class="btn btn-app bg-blue" href="{{ route('transaksi.index') }}">
             <i class="fas fa-plus"></i> Baru
           </a>          
           <a href="/transaksi.edit" class="btn btn-app bg-yellow">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a class="btn btn-app bg-green">
+          {{-- <a class="btn btn-app bg-green">
             <i class="fas fa-save"></i> Simpan
-          </a>
+          </a> --}}
           <a href="/" class="btn btn-app bg-red">
             <i class="fas fa-times-circle"></i> Batal
           </a>                    

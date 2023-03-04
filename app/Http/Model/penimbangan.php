@@ -12,6 +12,8 @@ class penimbangan extends Model
         'id_sampah',
         'berat',
         'total_harga',
-        'id_nasabah'
+        'id_nasabah',
+        'id_petugas',
+        'kode_transaksi',
     ];
 }

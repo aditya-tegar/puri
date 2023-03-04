@@ -15,27 +15,33 @@ class TransaksiController extends Controller
     {
         $data = $request->all();
         // jika kode penimbanganan '0' init jadi 1
-        $KodeTerakhir=Transaksi::orderBy('kode_transaksi', 'desc')->first()->kode_transaksi??null;
+        $KodeTerakhir=penimbangan::orderBy('kode_transaksi', 'desc')->first()->kode_transaksi??null;
 
         //define kode 'PNB' berdasarkan kode terakhir
-        if (
-            !$KodeTerakhir
-        ){
-            $KodeTerakhir=1;
+        if (!$KodeTerakhir){
+            $KodeTerakhir="PNB-001";
         }else{
             $KodeTerakhir++;
         }
-        $NomorPenimbangan='PNB-'.str_pad($KodeTerakhir, 3, '0', STR_PAD_LEFT);
-        $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->where('penimbangan.id_nasabah','=',$request->nasabah)->get();
+        $NomorPenimbangan= str_pad($KodeTerakhir, 3, '0', STR_PAD_LEFT);
+        if ($request->kode_transaksi) {
+            $NomorPenimbangan = $request->kode_transaksi;
+        }
+        $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')
+            ->where('penimbangan.id_nasabah','=',$request->selectnasabah)
+            ->where('penimbangan.kode_transaksi', '=', $NomorPenimbangan)
+            ->get();
         // $penimbanganModel = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         $Petugas=User::first();
         $SemuaNasabah=Nasabah::all();
         $ListSampah=Sampah::all();
+        $Nasabah = Nasabah::where('id',$request->selectnasabah)->first();
 
-        $countTotalHarga = penimbangan::where('penimbangan.id_nasabah','=',$request->nasabah)->sum('total_harga');
+        $countTotalHarga = penimbangan::where('penimbangan.id_nasabah','=',$request->selectnasabah)
+            ->where('penimbangan.kode_transaksi', '=', $NomorPenimbangan)
+            ->sum('total_harga');
 
-
-        return view('transaksi.index', compact('NomorPenimbangan', 'Petugas', 'SemuaNasabah', 'ListSampah','penimbanganModel','countTotalHarga','data','request'))->with('i', (request()->input('page',1)-1)*5);;
+        return view('transaksi.index', compact('Nasabah', 'NomorPenimbangan', 'Petugas', 'SemuaNasabah', 'ListSampah','penimbanganModel','countTotalHarga','data','request'))->with('i', (request()->input('page',1)-1)*5);;
         
     }
     public function create(Request $request)
@@ -51,18 +57,19 @@ class TransaksiController extends Controller
             'id_sampah'=>'required',
             'berat'=>'required',
             'total_harga',
-            'id_nasabah',
-        ]);  
+        ]);
+
         $penimbangan = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         foreach($penimbangan as $penimbangan){
             $penimbangan->id;
         }
+
+        $sampah = Sampah::where('id', $request->id_sampah)->first();
         
-        $request['total_harga']  =  $penimbangan->harga_beli * $request->berat;
-        $request['id_nasabah'] = $request->nasabah;
+        $request['total_harga']  =  $sampah->harga_beli * $request->berat;
         
         penimbangan::create($request->all());
-        return redirect()->route('transaksi.store')->with('Success','Sukses Menambah Data  ');
+        return redirect()->route('transaksi.store', array('selectnasabah' => $request->id_nasabah, 'kode_transaksi' => $request->kode_transaksi))->with('Success','Sukses Menambah Data  ');
     }
 
 
@@ -107,8 +114,8 @@ class TransaksiController extends Controller
             'berat'=>'required',
             'total_harga',
             'id_nasabah',
-
         ]);  
+
         $penimbangan = penimbangan::leftJoin('sampah','sampah.id','=','penimbangan.id_sampah')->get();
         foreach($penimbangan as $penimbangan){
             $penimbangan->id;

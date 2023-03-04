@@ -303,6 +303,14 @@ function currentSlide(n) {
   showSlides(slideIndex = n);
 }
 
+function assignNasabahId() {
+  document.getElementById('id_nasabah').value = document.getElementById('selectnasabah').value;
+  var querystring = window.location.search;
+  var params = new URLSearchParams(querystring);
+
+  document.getElementById('id_nasabah').value = params.get('selectnasabah');
+}
+
 function showSlides(n) {
   let i;
   let slides = document.getElementsByClassName("mySlides");
